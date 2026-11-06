@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Library{% endblock %} · Online Library</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  {% if session.get('user_id') %}
+  <header class="topbar">
+    <a class="brand" href="{{ url_for('dashboard') }}">Online Library</a>
+    <nav>
+      <a href="{{ url_for('dashboard') }}" {% if request.endpoint == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+      <a href="{{ url_for('books') }}" {% if request.endpoint == 'books' %}aria-current="page"{% endif %}>Books</a>
+      <a href="{{ url_for('students') }}" {% if request.endpoint == 'students' %}aria-current="page"{% endif %}>Students</a>
+      <a href="{{ url_for('search') }}" {% if request.endpoint == 'search' %}aria-current="page"{% endif %}>Search</a>
+    </nav>
+    <span class="who">{{ session['username'] }} · <a href="{{ url_for('logout') }}">Log out</a></span>
+  </header>
+  {% endif %}
+  <main class="wrap">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <p class="flash {{ category }}" role="status">{{ message }}</p>
+      {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

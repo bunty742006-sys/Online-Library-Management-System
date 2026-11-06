@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<dl class="stats">
+  <div><dd>{{ stats.titles }}</dd><dt>Book titles</dt></div>
+  <div><dd>{{ stats.available }}</dd><dt>Copies on the shelf</dt></div>
+  <div><dd>{{ stats.issued }}</dd><dt>Copies on loan</dt></div>
+  <div><dd>{{ stats.students }}</dd><dt>Students</dt></div>
+</dl>
+
+<h2>Books on loan</h2>
+{% if active %}
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Book</th><th>Student</th><th>Roll no.</th><th>Issued on</th><th></th></tr></thead>
+  <tbody>
+  {% for i in active %}
+    <tr>
+      <td>{{ i.title }}</td>
+      <td>{{ i.name }}</td>
+      <td>{{ i.roll_no }}</td>
+      <td>{{ i.issue_date }}</td>
+      <td>
+        <form method="post" action="{{ url_for('return_book', issue_id=i.id) }}">
+          <button class="secondary" type="submit">Mark returned</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">Nothing is on loan. Issue a book from the <a href="{{ url_for('books') }}">Books</a> page.</p>
+{% endif %}
+{% endblock %}

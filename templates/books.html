@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Books{% endblock %}
+{% block content %}
+<h1>Books</h1>
+
+<form method="post" class="inline-form">
+  <label>Title <input name="title" required></label>
+  <label>Author <input name="author" required></label>
+  <label>ISBN <input name="isbn" required></label>
+  <label class="narrow">Copies <input type="number" name="copies" min="1" value="1" required></label>
+  <button type="submit">Add book</button>
+</form>
+
+{% if books %}
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Title</th><th>Author</th><th>ISBN</th><th>Available</th><th>Issue to</th><th></th></tr></thead>
+  <tbody>
+  {% for b in books %}
+    <tr>
+      <td>{{ b.title }}</td>
+      <td>{{ b.author }}</td>
+      <td>{{ b.isbn }}</td>
+      <td><span class="pill {{ 'low' if b.available == 0 else '' }}">{{ b.available }} of {{ b.copies }}</span></td>
+      <td>
+        {% if b.available > 0 and students %}
+        <form method="post" action="{{ url_for('issue_book', book_id=b.id) }}" class="row">
+          <select name="student_id" aria-label="Student" required>
+            <option value="" disabled selected>Choose student</option>
+            {% for s in students %}<option value="{{ s.id }}">{{ s.name }} ({{ s.roll_no }})</option>{% endfor %}
+          </select>
+          <button class="secondary" type="submit">Issue</button>
+        </form>
+        {% elif b.available == 0 %}<span class="muted">All copies on loan</span>
+        {% else %}<span class="muted">Add a student first</span>{% endif %}
+      </td>
+      <td>
+        <form method="post" action="{{ url_for('delete_book', book_id=b.id) }}"
+              onsubmit="return confirm('Delete this book?');">
+          <button class="danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">No books yet. Add the first one with the form above.</p>
+{% endif %}
+{% endblock %}

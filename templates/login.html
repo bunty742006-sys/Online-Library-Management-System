@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+<section class="login">
+  <h1>Online Library</h1>
+  <p class="muted">Log in to manage books, students and loans.</p>
+  <form method="post">
+    <label>Username
+      <input type="text" name="username" autocomplete="username" required autofocus>
+    </label>
+    <label>Password
+      <input type="password" name="password" autocomplete="current-password" required>
+    </label>
+    <button type="submit">Log in</button>
+  </form>
+</section>
+{% endblock %}

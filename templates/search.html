@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<h1>Search</h1>
+<form method="get" class="inline-form">
+  <label>Search for <input name="q" value="{{ q }}" placeholder="Title, author, ISBN, name or roll no." required></label>
+  <label class="narrow">In
+    <select name="scope">
+      <option value="books" {{ 'selected' if scope == 'books' }}>Books</option>
+      <option value="students" {{ 'selected' if scope == 'students' }}>Students</option>
+    </select>
+  </label>
+  <button type="submit">Search</button>
+</form>
+
+{% if q %}
+  {% if results %}
+  <div class="table-scroll">
+  <table>
+    {% if scope == 'students' %}
+    <thead><tr><th>Name</th><th>Roll no.</th><th>Email</th></tr></thead>
+    <tbody>{% for r in results %}<tr><td>{{ r.name }}</td><td>{{ r.roll_no }}</td><td>{{ r.email }}</td></tr>{% endfor %}</tbody>
+    {% else %}
+    <thead><tr><th>Title</th><th>Author</th><th>ISBN</th><th>Available</th></tr></thead>
+    <tbody>{% for r in results %}<tr><td>{{ r.title }}</td><td>{{ r.author }}</td><td>{{ r.isbn }}</td><td>{{ r.available }} of {{ r.copies }}</td></tr>{% endfor %}</tbody>
+    {% endif %}
+  </table>
+  </div>
+  {% else %}
+  <p class="empty">No {{ scope }} match “{{ q }}”. Try a shorter or different term.</p>
+  {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<h1>Students</h1>
+
+<form method="post" class="inline-form">
+  <label>Name <input name="name" required></label>
+  <label>Roll number <input name="roll_no" required></label>
+  <label>Email <input type="email" name="email" required></label>
+  <button type="submit">Add student</button>
+</form>
+
+{% if students %}
+<div class="table-scroll">
+<table>
+  <thead><tr><th>Name</th><th>Roll no.</th><th>Email</th><th>Books on loan</th><th></th></tr></thead>
+  <tbody>
+  {% for s in students %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.roll_no }}</td>
+      <td>{{ s.email }}</td>
+      <td>{{ s.on_loan }}</td>
+      <td>
+        <form method="post" action="{{ url_for('delete_student', student_id=s.id) }}"
+              onsubmit="return confirm('Delete this student?');">
+          <button class="danger" type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="empty">No students yet. Add the first one with the form above.</p>
+{% endif %}
+{% endblock %}
